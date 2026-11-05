@@ -47,7 +47,7 @@ resource "aws_kms_key" "efs_cmk" {
   }
 }
 
-# ✅ Remediated: EFS File System with encryption enabled and CMK mapped (resolves CKV_AWS_42, CKV_AWS_184)
+# ✅ Fixed: EFS File System with encryption enabled and CMK mapped (resolves CKV_AWS_42)
 resource "aws_efs_file_system" "demo_efs" {
   creation_token = "wezvatech-aiops-demo"
   encrypted      = true
@@ -59,12 +59,12 @@ resource "aws_efs_file_system" "demo_efs" {
   }
 }
 
-# ❌ Violation 2: Backup policy is explicitly disabled
+# ✅ Fixed: Backup policy explicitly enabled to prevent data loss vulnerabilities
 resource "aws_efs_backup_policy" "policy" {
   file_system_id = aws_efs_file_system.demo_efs.id
 
   backup_policy {
-    status = "DISABLED" # Explicit policy violation (Should be ENABLED)
+    status = "ENABLED"
   }
 }
 
